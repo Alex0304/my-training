@@ -20,6 +20,7 @@
         <httpclient.version>4.5.2</httpclient.version>
         <jsoup.version>1.8.3</jsoup.version>
         <servelet.api.version>3.1.0</servelet.api.version>
+        <jedis.version>2.9.0</jedis.version>
     </properties>
 
     <dependencies>
@@ -176,6 +177,11 @@
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
             <version>${jsoup.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>${jedis.version}</version>
         </dependency>
     </dependencies>
     <build>

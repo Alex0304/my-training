@@ -4,6 +4,7 @@ import com.ch.train.entity.Product;
 import com.ch.train.exception.BusinessException;
 import com.ch.train.form.IdForm;
 import com.ch.train.form.ProductQueryPageForm;
+import com.ch.train.form.ProductSaveForm;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
@@ -36,7 +37,7 @@ public interface ProductService {
      * @param product 实例对象
      * @return 实例对象
      */
-    Product insert(Product product) throws BusinessException;
+    ProductSaveForm insert(ProductSaveForm product) throws BusinessException;
 
     /**
      * 修改数据
@@ -44,12 +45,12 @@ public interface ProductService {
      * @param product 实例对象
      * @return 实例对象
      */
-    Product update(Product product) throws BusinessException;
+    ProductSaveForm update(ProductSaveForm product) throws BusinessException;
 
     /**
      * 通过主键删除数据
      *
-     * @param id 主键
+     * @param idForm 主键
      * @return 是否成功
      */
     boolean deleteById(IdForm idForm);

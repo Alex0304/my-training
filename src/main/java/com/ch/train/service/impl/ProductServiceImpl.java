@@ -5,6 +5,7 @@ import com.ch.train.dao.ProductDao;
 import com.ch.train.exception.BusinessException;
 import com.ch.train.form.IdForm;
 import com.ch.train.form.ProductQueryPageForm;
+import com.ch.train.form.ProductSaveForm;
 import com.ch.train.service.ProductService;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Page;
@@ -58,9 +59,9 @@ public class ProductServiceImpl implements ProductService {
      * @return 实例对象
      */
     @Override
-    public Product insert(Product product) throws BusinessException {
-        this.productDao.insert(product);
-        return product;
+    public ProductSaveForm insert(ProductSaveForm product) throws BusinessException {
+        int id = this.productDao.insert(product);
+        return product.setId(id);
     }
 
     /**
@@ -70,7 +71,7 @@ public class ProductServiceImpl implements ProductService {
      * @return 实例对象
      */
     @Override
-    public Product update(Product product) throws BusinessException {
+    public ProductSaveForm update(ProductSaveForm product) throws BusinessException {
         productDao.update(product);
         return product;
     }
@@ -78,7 +79,7 @@ public class ProductServiceImpl implements ProductService {
     /**
      * 通过主键删除数据
      *
-     * @param id 主键
+     * @param idForm 主键
      * @return 是否成功
      */
     @Override

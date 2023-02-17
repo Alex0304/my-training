@@ -4,6 +4,7 @@ import com.ch.train.entity.Product;
 import com.ch.train.exception.BusinessException;
 import com.ch.train.form.IdForm;
 import com.ch.train.form.ProductQueryPageForm;
+import com.ch.train.form.ProductSaveForm;
 import com.ch.train.service.ProductService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -56,7 +57,7 @@ public class ProductController {
      * @return 新增结果
      */
     @PostMapping
-    public ResponseEntity<Product> add(Product product) throws BusinessException {
+    public ResponseEntity<ProductSaveForm> add(ProductSaveForm product) throws BusinessException {
         return ResponseEntity.ok(this.productService.insert(product));
     }
 
@@ -67,7 +68,7 @@ public class ProductController {
      * @return 编辑结果
      */
     @PutMapping
-    public ResponseEntity<Product> edit(Product product) throws BusinessException {
+    public ResponseEntity<ProductSaveForm> edit(ProductSaveForm product) throws BusinessException {
         return ResponseEntity.ok(this.productService.update(product));
     }
 
@@ -77,8 +78,8 @@ public class ProductController {
      * @param idForm 主键
      * @return 删除是否成功
      */
-    @DeleteMapping
-    public ResponseEntity<Boolean> deleteById(IdForm idForm) {
+    @PostMapping("/deleteById")
+    public ResponseEntity<Boolean> deleteById(@RequestBody IdForm idForm) {
         return ResponseEntity.ok(this.productService.deleteById(idForm));
     }
 

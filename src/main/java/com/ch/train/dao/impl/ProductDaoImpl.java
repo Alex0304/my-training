@@ -8,6 +8,7 @@ import com.ch.train.exception.BusinessException;
 import com.ch.train.form.DataAuthForm;
 import com.ch.train.form.IdForm;
 import com.ch.train.form.ProductQueryPageForm;
+import com.ch.train.form.ProductSaveForm;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -43,7 +44,7 @@ public class ProductDaoImpl extends AbstractShardTableDao<Product> implements Pr
     private static final String INSERT_SQL = "insert into product(name,`desc`,price,user_id,create_time,update_time) values (?,?,?,?,?,?);";
     private static final String UPDATE_SQL = "update product set name = ?,`desc` =?,price =?,update_time = ? where id =?;";
     private static final String DELETE_SQL = "delete from product  where id = ?;";
-    private static final String PAGE_SQL = "select id,name,`desc`,price,create_time,update_time from product";
+    private static final String PAGE_SQL = "select id,name,`desc`,price,create_time,update_time,user_id from product";
     private static final String COUNT_SQL = "select count(1) from product";
 
 
@@ -81,8 +82,7 @@ public class ProductDaoImpl extends AbstractShardTableDao<Product> implements Pr
         ArrayList<Object> params = new ArrayList<>();
         if (StringUtils.isNotBlank(name)) {
             params.add(form.getName());
-            sql.append(" where name like concat(?,'%') ");
-
+            sql.append(" where name = ? ");
         }
         sql.append(" limit ?,? ");
         params.add(form.getPage());
@@ -114,15 +114,15 @@ public class ProductDaoImpl extends AbstractShardTableDao<Product> implements Pr
         ArrayList<Object> params = new ArrayList<>();
         if (StringUtils.isNotBlank(name)) {
             params.add(form.getName());
-            sql.append(" where name like concat(?,'%') ");
+            sql.append(" where name =?");
         }
         return jdbcTemplate.queryForObject(sql.toString(), params.toArray(), Long.class);
     }
 
     @Override
     @SharedDataSource
-    public int insert(Product product) throws BusinessException {
-        String sql = replaceSql(INSERT_SQL,Product.class,new DataAuthForm(product.getUserId()));
+    public int insert(ProductSaveForm product) throws BusinessException {
+        String sql = replaceSql(INSERT_SQL,Product.class,product);
         KeyHolder keyHolder = new GeneratedKeyHolder();
         try {
             jdbcTemplate.update(connection -> {
@@ -144,11 +144,11 @@ public class ProductDaoImpl extends AbstractShardTableDao<Product> implements Pr
 
     @Override
     @SharedDataSource
-    public int update(Product product) throws BusinessException {
+    public int update(ProductSaveForm product) throws BusinessException {
         if (Objects.isNull(product) || Objects.isNull(product.getId())) {
             return 0;
         }
-        String sql = replaceSql(UPDATE_SQL,Product.class,new DataAuthForm(product.getUserId()));
+        String sql = replaceSql(UPDATE_SQL,Product.class,product);
         try {
             return jdbcTemplate.update(sql, preparedStatement -> {
                 Timestamp now = new Timestamp(System.currentTimeMillis());

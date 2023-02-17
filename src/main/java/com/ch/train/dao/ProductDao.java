@@ -4,6 +4,7 @@ import com.ch.train.entity.Product;
 import com.ch.train.exception.BusinessException;
 import com.ch.train.form.IdForm;
 import com.ch.train.form.ProductQueryPageForm;
+import com.ch.train.form.ProductSaveForm;
 
 import java.util.List;
 
@@ -42,7 +43,7 @@ public interface ProductDao{
      * @param product 实例对象
      * @return 影响行数
      */
-    int insert(Product product) throws BusinessException;
+    int insert(ProductSaveForm product) throws BusinessException;
 
     /**
      * 修改数据
@@ -50,12 +51,12 @@ public interface ProductDao{
      * @param product 实例对象
      * @return 影响行数
      */
-    int update(Product product) throws BusinessException;
+    int update(ProductSaveForm product) throws BusinessException;
 
     /**
      * 通过主键删除数据
      *
-     * @param id 主键
+     * @param idForm
      * @return 影响行数
      */
     int deleteById(IdForm idForm);
