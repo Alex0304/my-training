@@ -2,7 +2,6 @@ package com.ch.train.service.impl;
 
 import com.ch.train.entity.ProcessMsg;
 import com.ch.train.form.ZipFileForm;
-import com.ch.train.form.ZipFileTaskForm;
 
 /**
  * @author DXM-0189

@@ -1,9 +1,7 @@
 package com.ch.train.service.impl;
 
-import com.ch.train.controller.HelloController;
 import com.ch.train.entity.ProcessMsg;
 import com.ch.train.form.ZipFileForm;
-import com.ch.train.form.ZipFileTaskForm;
 import com.ch.train.utils.GZipUtils;
 import com.ch.train.utils.RedisUtil;
 import org.apache.commons.logging.Log;

@@ -3,7 +3,6 @@ package com.ch.train.service.impl;
 import com.ch.train.entity.ProcessMsg;
 import com.ch.train.exception.BusinessException;
 import com.ch.train.form.ZipFileForm;
-import com.ch.train.form.ZipFileTaskForm;
 import com.ch.train.service.ProcessMsgService;
 import com.ch.train.utils.RedisUtil;
 import org.springframework.stereotype.Service;
