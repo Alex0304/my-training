@@ -1,0 +1,114 @@
+/*基础*/
+*{
+    font-family: -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif;
+    color: #000;
+    margin: 0;
+    padding: 0;
+}
+*:focus {
+    outline: none !important;
+}
+body {
+    min-width: 1250px !important;
+    background-color: #fff;
+}
+ul,ol {
+    list-style: none;
+    margin: 0;
+}
+b,strong,th,dt {
+    font-weight: 600;
+}
+.w300 {
+    width: 300px !important;
+}
+.f-right {
+    text-align: right;
+}
+/*布局*/
+.page-content {
+    margin: 0 auto;
+    padding: 20px;
+    width: 1100px;
+}
+/*导航*/
+.header {
+    position: relative;
+    padding: 0 20px;
+    height: 60px;
+    background-color: #428bca;
+}
+.header .con {
+    margin: 0 auto;
+    width: 1100px;
+    font-size: 30px;
+    font-weight: 600;
+    text-align: left;
+    line-height: 60px;
+    color: #fff;
+}
+/*列表*/
+ul:after {
+    display: block;
+    clear: both;
+    content: '';
+}
+ul > li {
+    margin-right: 20px;
+    float: left;
+}
+.pagination > li {
+    margin-right: 0;
+}
+/*表格*/
+table {
+    margin: 10px 0;
+}
+table > thead > tr > th {
+    padding: 10px;
+    border: 1px solid #e8e8e8;
+    background-color: #f2f2f2;
+}
+table > tbody > tr > td {
+    padding: 10px;
+    border: 1px solid #e8e8e8;
+}
+table > tbody > tr > td:last-child {
+    text-align: center;
+}
+table > tbody > tr > td:last-child a {
+    display: block;
+    margin-bottom: 5px;
+}
+/*按钮*/
+button {
+    min-width: 80px;
+    border: 1px solid #428bca;
+    border-radius: 2px;
+    padding: 6px 12px;
+    color: #fff !important;
+    background-color: #428bca;
+}
+button.btn-default {
+    color: #333 !important;
+}
+/*模态框*/
+.modal .close {
+    margin-top: -2px;
+    min-width: 30px;
+    font-size: 30px;
+}
+.modal table {
+    width: 100%;
+}
+.modal table > tbody > tr > td {
+    border: 0;
+}
+/*搜索*/
+.search-box {
+    margin:  10px 0;
+}
+.search-box input {
+    display: inline-block;
+    margin-right: 10px;
+}

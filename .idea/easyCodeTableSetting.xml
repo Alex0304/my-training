@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="EasyCodeTableSetting">
+    <option name="tableInfoMap">
+      <map>
+        <entry key="product.product">
+          <value>
+            <TableInfoDTO>
+              <option name="comment" value="商品表" />
+              <option name="fullColumn">
+                <list>
+                  <ColumnInfoDTO>
+                    <option name="comment" value="主键id" />
+                    <option name="custom" value="false" />
+                    <option name="ext" value="{}" />
+                    <option name="name" value="id" />
+                    <option name="type" value="java.lang.Integer" />
+                  </ColumnInfoDTO>
+                  <ColumnInfoDTO>
+                    <option name="comment" value="商品名称" />
+                    <option name="custom" value="false" />
+                    <option name="ext" value="{}" />
+                    <option name="name" value="name" />
+                    <option name="type" value="java.lang.String" />
+                  </ColumnInfoDTO>
+                  <ColumnInfoDTO>
+                    <option name="comment" value="商品描述" />
+                    <option name="custom" value="false" />
+                    <option name="ext" value="{}" />
+                    <option name="name" value="desc" />
+                    <option name="type" value="java.lang.String" />
+                  </ColumnInfoDTO>
+                  <ColumnInfoDTO>
+                    <option name="comment" value="商品价格" />
+                    <option name="custom" value="false" />
+                    <option name="ext" value="{}" />
+                    <option name="name" value="price" />
+                    <option name="type" value="java.lang.Double" />
+                  </ColumnInfoDTO>
+                  <ColumnInfoDTO>
+                    <option name="comment" value="创建时间" />
+                    <option name="custom" value="false" />
+                    <option name="ext" value="{}" />
+                    <option name="name" value="createTime" />
+                    <option name="type" value="java.util.Date" />
+                  </ColumnInfoDTO>
+                  <ColumnInfoDTO>
+                    <option name="comment" value="修改时间" />
+                    <option name="custom" value="false" />
+                    <option name="ext" value="{}" />
+                    <option name="name" value="updateTime" />
+                    <option name="type" value="java.util.Date" />
+                  </ColumnInfoDTO>
+                </list>
+              </option>
+              <option name="name" value="Product" />
+              <option name="preName" value="" />
+              <option name="saveModelName" value="my-training" />
+              <option name="savePackageName" value="com.ch.train" />
+              <option name="savePath" value="./src/main/java/com/ch/train" />
+              <option name="templateGroupName" value="Default" />
+            </TableInfoDTO>
+          </value>
+        </entry>
+        <entry key="product.ship_product">
+          <value>
+            <TableInfoDTO>
+              <option name="comment" value="发货商品表" />
+              <option name="fullColumn">
+                <list>
+                  <ColumnInfoDTO>
+                    <option name="comment" value="主键id" />
+                    <option name="custom" value="false" />
+                    <option name="ext" value="{}" />
+                    <option name="name" value="id" />
+                    <option name="type" value="java.lang.Integer" />
+                  </ColumnInfoDTO>
+                  <ColumnInfoDTO>
+                    <option name="comment" value="发货商品字符串" />
+                    <option name="custom" value="false" />
+                    <option name="ext" value="{}" />
+                    <option name="name" value="shipProductStr" />
+                    <option name="type" value="java.lang.String" />
+                  </ColumnInfoDTO>
+                  <ColumnInfoDTO>
+                    <option name="comment" value="创建时间" />
+                    <option name="custom" value="false" />
+                    <option name="ext" value="{}" />
+                    <option name="name" value="createTime" />
+                    <option name="type" value="java.util.Date" />
+                  </ColumnInfoDTO>
+                  <ColumnInfoDTO>
+                    <option name="comment" value="url 地址" />
+                    <option name="custom" value="false" />
+                    <option name="ext" value="{}" />
+                    <option name="name" value="url" />
+                    <option name="type" value="java.lang.String" />
+                  </ColumnInfoDTO>
+                </list>
+              </option>
+              <option name="name" value="ShipProduct" />
+              <option name="preName" value="" />
+              <option name="saveModelName" value="" />
+              <option name="savePackageName" value="" />
+              <option name="savePath" value="" />
+              <option name="templateGroupName" value="" />
+            </TableInfoDTO>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
