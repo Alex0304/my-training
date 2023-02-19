@@ -103,5 +103,15 @@ public class Product implements Serializable {
         this.userId = userId;
         return this;
     }
+
+    public Product(Integer id, String name, String desc, BigDecimal price) {
+        this.id = id;
+        this.name = name;
+        this.desc = desc;
+        this.price = price;
+    }
+
+    public Product() {
+    }
 }
 
