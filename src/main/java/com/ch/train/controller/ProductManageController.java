@@ -39,7 +39,8 @@ public class ProductManageController implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        Product product1 = new Product(1, "xiaomi", "小米手机", new BigDecimal(1999));
+       // Product product1 = new Product(1, "xiaomi", "小米手机", new BigDecimal(1999));
+        Product product1 = new Product(1, "xiaomi", "<script type=\"text/javascript\">alert(1)</script>", new BigDecimal(1999));
         Product product2 = new Product(2, "huawei", "华为", new BigDecimal(4999));
         Product product3 = new Product(3, "honor", "荣耀", new BigDecimal(2999));
         Product product4 = new Product(4, "vivo", "vivo手机", new BigDecimal(3999));
