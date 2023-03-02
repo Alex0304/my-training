@@ -11,6 +11,7 @@ import com.ch.train.component.datasource.ShardingTable;
 import com.ch.train.form.DataAuthForm;
 
 import javax.annotation.Resource;
+import java.util.Objects;
 
 
 /**
@@ -35,12 +36,15 @@ public abstract class AbstractShardTableDao<T> implements ShardTableDao<T> {
      */
     @Override
     public String replaceSql(String sql, Class<T> tClass, DataAuthForm dataAuthForm) {
-        int shardTableType = shardingTableStrategy.getShardTableType(dataAuthForm);
+        Integer shardTableType = shardingTableStrategy.getShardTableType(dataAuthForm);
         ShardingTable declaredAnnotation = tClass.getDeclaredAnnotation(ShardingTable.class);
         if(declaredAnnotation == null){
             return sql;
         }
         String logicTableName = declaredAnnotation.tableName();
+        if(Objects.isNull(shardTableType)){
+            return sql;
+        }
         String actualTableName = logicTableName + "_" + shardTableType;
         return sql.replaceAll(logicTableName,actualTableName);
     }

@@ -12,10 +12,10 @@
 </head>
 <body>
 <%--新增数据以后，我们点击保存后要回到列表页面--%>
-<h1>新增页面</h1>
-<form action="<%=request.getContextPath()+"/xss/toAdd"%>" method="post">
-  留言:<input type="text" name="str"><br>
-  <input type="submit" value="保存">
+<h1>查询用户分库分表规则</h1>
+<form action="<%=request.getContextPath()+"/sharding/queryRuleByUserId"%>" method="get">
+  用户id:<input type="text" name="userId"><br>
+  <input type="submit" value="查询">
 </form>
 
 </body>

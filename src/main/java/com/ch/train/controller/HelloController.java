@@ -19,7 +19,7 @@ public class HelloController {
 
     @RequestMapping("/hello")
     public String sayHello(){
-        logger.info("hjjsjs");
+        logger.info("Hello World");
         return "index";
     }
 

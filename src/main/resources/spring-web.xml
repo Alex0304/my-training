@@ -20,7 +20,7 @@
     <mvc:interceptors>
         <mvc:interceptor>
             <mvc:mapping path="/**"/>
-            <ref bean="baseInterceptor"/>
+            <ref bean="baseAccessLogInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>
 </beans>

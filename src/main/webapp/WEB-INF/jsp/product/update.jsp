@@ -12,7 +12,7 @@
 </head>
 <body>
 <h1>编辑页面</h1>
-<form action="<%=request.getContextPath()+"/product/toAdd"%>" method="post">
+<form action="<%=request.getContextPath()+"/product/toUpdate"%>" method="post">
     <input type="number" hidden="true" name="id" value="${product.id}">
     <input type="number" hidden="true" name="userId" value="${product.userId}">
     商品名称:<input type="text" name="name" value="${product.name}" ><br>

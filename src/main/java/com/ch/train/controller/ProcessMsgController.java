@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
 
 /**
  * 文件压缩批量任务处理
@@ -27,16 +28,18 @@ public class ProcessMsgController {
     /**
      * 提交压缩任务
      * 返回任务id
-     * @param zipFileForm
+     * @param url
      * @return
      */
     @PostMapping("/zip")
-    public ResponseEntity<String> submitZipTask(@RequestBody ZipFileForm zipFileForm) throws BusinessException {
+    public ResponseEntity<String> submitZipTask(@RequestParam String url) throws BusinessException {
+        ZipFileForm zipFileForm = new ZipFileForm().setUrls(Arrays.asList(url.split(",")));
         return ResponseEntity.ok(this.processMsgService.submitZipTask(zipFileForm));
     }
 
-    @PostMapping("/queryProcessById")
+    @GetMapping("/queryProcessById")
     public ResponseEntity<ProcessMsg> queryProcessById(String taskId) {
         return ResponseEntity.ok(this.processMsgService.queryProcessById(taskId));
     }
+
 }

@@ -13,10 +13,12 @@
 <body>
 <%--新增数据以后，我们点击保存后要回到列表页面--%>
 <h1>新增页面</h1>
-<form action="<%=request.getContextPath()+"/xss/toAdd"%>" method="post">
-  留言:<input type="text" name="str"><br>
+<form action="<%=request.getContextPath()+"/product/toAdd"%>" method="post">
+  用户id:<input type="number" name="userId"><br>
+  商品名称:<input type="text" name="name"  ><br>
+  商品描述:<input type="text" name="desc"  ><br>
+  商品价格:<input type="text" name="price"><br>
   <input type="submit" value="保存">
 </form>
-
 </body>
 </html>

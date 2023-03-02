@@ -21,7 +21,7 @@
     <!-- xss过滤器 -->
     <filter>
         <filter-name>XssgFilter</filter-name>
-        <filter-class>com.train.web.filter.XssFilter</filter-class>
+        <filter-class>com.ch.train.component.filter.XssFilter</filter-class>
     </filter>
     <filter-mapping>
         <filter-name>XssgFilter</filter-name>

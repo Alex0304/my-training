@@ -94,14 +94,14 @@
   </div>
 
 <%--  <div>--%>
-<%--    <form action="<%=context %>/product/page"   id="productForm"  method="post">--%>
+    <form action="<%=context %>/product/page"   id="productForm"  method="post">
 <%--      商品名称--%>
 <%--      <input type="text" name="productName" id="pro_name" style="width:120px" value="${productName }">--%>
-<%--      --%>
 
-<%--      <input type="submit" value="查询">--%>
-<%--    </form>--%>
-<%--  </div>--%>
+
+      <input type="submit" value="查询">
+    </form>
+  </div>
   <br>
   商品信息列表：<br>
   <br>

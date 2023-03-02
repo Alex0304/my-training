@@ -3,6 +3,8 @@ package com.ch.train.component.datasource;
 import com.ch.train.form.DataAuthForm;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
+
 /**
  * @author DXM-0189
  */
@@ -22,8 +24,11 @@ public class ShardingDatabaseStrategyImpl implements ShardingDatabaseStrategy {
     }
 
     @Override
-    public int getShardTableType(DataAuthForm dataAuthForm) {
+    public Integer getShardTableType(DataAuthForm dataAuthForm) {
         Integer userId = dataAuthForm.getUserId();
+        if(Objects.isNull(userId)){
+            return null;
+        }
         int i = userId % 2;
         return i;
     }
@@ -36,7 +41,10 @@ public class ShardingDatabaseStrategyImpl implements ShardingDatabaseStrategy {
     @Override
     public String getShardDatabaseAndTable(DataAuthForm dataAuthForm) {
         DataBaseType shardDataBaseType = getShardDataBaseType(dataAuthForm);
-        int i = getShardTableType(dataAuthForm);
-        return shardDataBaseType.getDatabase()+":"+i;
+        Integer table = getShardTableType(dataAuthForm);
+        if(Objects.isNull(table)){
+            return shardDataBaseType.getDatabase();
+        }
+        return shardDataBaseType.getDatabase()+":"+table;
     }
 }

@@ -1,5 +1,6 @@
 package com.ch.train.utils;
 
+import cn.hutool.core.util.EscapeUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -105,5 +106,11 @@ public class JSONUtil {
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	public static void main(String[] args) {
+		String content = "<script type=\"text/javascript\">alert(1)</script>";
+		String escape = EscapeUtil.escapeHtml4(content);
+		System.out.println(escape);
 	}
 }

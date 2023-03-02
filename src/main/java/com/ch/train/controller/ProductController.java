@@ -9,9 +9,12 @@ import com.ch.train.service.ProductService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Objects;
 
 /**
  * 商品表(Product)表控制层
@@ -19,8 +22,8 @@ import javax.annotation.Resource;
  * @author chenhuan
  * @since 2023-02-15 10:41:40
  */
-@RestController
 @RequestMapping("product")
+@Controller
 public class ProductController {
     /**
      * 服务对象
@@ -28,15 +31,22 @@ public class ProductController {
     @Resource
     private ProductService productService;
 
+
     /**
      * 分页查询
      *
-     * @param form      分页对象
+     * @param form 分页对象
      * @return 查询结果
      */
-    @PostMapping("/queryByPage")
-    public ResponseEntity<Page<Product>> queryByPage(@RequestBody ProductQueryPageForm form) {
-        return ResponseEntity.ok(this.productService.queryByPage(form));
+    @RequestMapping("/queryByPage")
+    public String queryByPage(ProductQueryPageForm form, Model model) {
+        if (Objects.isNull(form.getUserId())) {
+            return "product/page";
+        }
+        Page<Product> productPage = this.productService.queryByPage(form);
+        model.addAttribute("result", productPage);
+        model.addAttribute("userId", form.getUserId());
+        return "product/page";
     }
 
     /**
@@ -50,15 +60,30 @@ public class ProductController {
         return ResponseEntity.ok(this.productService.queryById(idForm));
     }
 
+    @GetMapping("/add")
+    public String add() {
+        return "product/add";
+    }
+
     /**
      * 新增数据
      *
      * @param product 实体
      * @return 新增结果
      */
-    @PostMapping
-    public ResponseEntity<ProductSaveForm> add(ProductSaveForm product) throws BusinessException {
-        return ResponseEntity.ok(this.productService.insert(product));
+    @PostMapping("/toAdd")
+    public String toAdd(ProductSaveForm product,Model model) throws BusinessException {
+        this.productService.insert(product);
+        model.addAttribute("userId",product.getUserId());
+        return "redirect:/product/queryByPage";
+    }
+
+
+    @GetMapping("/update")
+    public String edit(IdForm idForm, Model model) {
+        Product product = productService.queryById(idForm);
+        model.addAttribute("product", product);
+        return "product/update";
     }
 
     /**
@@ -67,9 +92,11 @@ public class ProductController {
      * @param product 实体
      * @return 编辑结果
      */
-    @PutMapping
-    public ResponseEntity<ProductSaveForm> edit(ProductSaveForm product) throws BusinessException {
-        return ResponseEntity.ok(this.productService.update(product));
+    @PostMapping("toUpdate")
+    public String edit(ProductSaveForm product,Model model) throws BusinessException {
+         this.productService.update(product);
+         model.addAttribute("userId",product.getUserId());
+         return "redirect:/product/queryByPage";
     }
 
     /**
@@ -81,6 +108,11 @@ public class ProductController {
     @PostMapping("/deleteById")
     public ResponseEntity<Boolean> deleteById(@RequestBody IdForm idForm) {
         return ResponseEntity.ok(this.productService.deleteById(idForm));
+    }
+
+    @RequestMapping(value = "/process")
+    public String process() {
+        return "product/process";
     }
 
 }

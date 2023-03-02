@@ -1,6 +1,9 @@
 package com.ch.train.dao.impl;
 
 import com.ch.train.component.datasource.SharedDataSource;
+import com.ch.train.component.factory.sql.SqlFactory;
+import com.ch.train.component.factory.sql.impl.ProductSqlGenerator;
+import com.ch.train.component.factory.sql.impl.ShardingSqlFactory;
 import com.ch.train.controller.HelloController;
 import com.ch.train.dao.ProductDao;
 import com.ch.train.entity.Product;
@@ -12,6 +15,8 @@ import com.ch.train.form.ProductSaveForm;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -31,31 +36,28 @@ import java.util.Objects;
  * 使用jdbcTemplate 进行数据库访问，进行crud
  */
 @Repository
-public class ProductDaoImpl extends AbstractShardTableDao<Product> implements ProductDao {
+public class ProductDaoImpl extends BaseDaoImpl implements ProductDao {
 
     private static Log logger = LogFactory.getLog(HelloController.class);
+
+    @Autowired
+    public ProductDaoImpl(@Qualifier(value = "shardingSqlFactory") SqlFactory sqlFactory) {
+        super(sqlFactory);
+    }
 
     @Resource
     private JdbcTemplate jdbcTemplate;
 
-    private static final String SELECT_ONE = "select * from product\n" +
-            "where id=?";
-
-    private static final String INSERT_SQL = "insert into product(name,`desc`,price,user_id,create_time,update_time) values (?,?,?,?,?,?);";
-    private static final String UPDATE_SQL = "update product set name = ?,`desc` =?,price =?,update_time = ? where id =?;";
-    private static final String DELETE_SQL = "delete from product  where id = ?;";
-    private static final String PAGE_SQL = "select id,name,`desc`,price,create_time,update_time,user_id from product";
-    private static final String COUNT_SQL = "select count(1) from product";
 
 
     @Override
     @SharedDataSource
     public Product queryById(IdForm idForm) {
-        String sql = replaceSql(SELECT_ONE,Product.class,idForm);
+        String baseSql = getBaseSql(ProductSqlGenerator.QUERY_ONE,idForm);
         Integer[] args = new Integer[]{idForm.getId()};
         Product product = null;
         try {
-            product = jdbcTemplate.queryForObject(sql, args, (rs, rowNum) -> {
+            product = jdbcTemplate.queryForObject(baseSql, args, (rs, rowNum) -> {
                 Product temp = new Product();
                 temp.setId(rs.getInt("id"));
                 temp.setName(rs.getString("name"));
@@ -76,17 +78,23 @@ public class ProductDaoImpl extends AbstractShardTableDao<Product> implements Pr
     @Override
     @SharedDataSource
     public List<Product> queryAllByLimit(ProductQueryPageForm form) {
-        String replaceSql = replaceSql(PAGE_SQL,Product.class,form);
-        StringBuilder sql = new StringBuilder(replaceSql);
-        String name = form.getName();
+        String baseSql = getBaseSql(ProductSqlGenerator.QUERY_PAGE,form);
+        StringBuilder sql = new StringBuilder(baseSql);
         ArrayList<Object> params = new ArrayList<>();
-        if (StringUtils.isNotBlank(name)) {
-            params.add(form.getName());
-            sql.append(" where name = ? ");
+        if(Objects.nonNull(form.getUserId())){
+            params.add(form.getUserId());
+            sql.append(" where user_id = ? ");
         }
+        sql.append("order by update_time desc");
         sql.append(" limit ?,? ");
-        params.add(form.getPage());
-        params.add(form.getSize());
+        int page = form.getPage();
+        int size = form.getSize();
+        if(page<=1){
+            params.add(0);
+        }else {
+            params.add((page -1)*size);
+        }
+        params.add(size);
         List<Product> productList = jdbcTemplate.query(sql.toString(), params.toArray(), resultSet -> {
             List<Product> list = new ArrayList<>();
             while (resultSet.next()) {
@@ -108,13 +116,12 @@ public class ProductDaoImpl extends AbstractShardTableDao<Product> implements Pr
     @Override
     @SharedDataSource
     public long count(ProductQueryPageForm form) {
-        String replaceSql = replaceSql(COUNT_SQL,Product.class,form);
-        StringBuilder sql = new StringBuilder(replaceSql);
-        String name = form.getName();
+        String baseSql = getBaseSql(ProductSqlGenerator.QUERY_COUNT, form);
+        StringBuilder sql = new StringBuilder(baseSql);
         ArrayList<Object> params = new ArrayList<>();
-        if (StringUtils.isNotBlank(name)) {
-            params.add(form.getName());
-            sql.append(" where name =?");
+        if(Objects.nonNull(form.getUserId())){
+            params.add(form.getUserId());
+            sql.append(" where user_id = ? ");
         }
         return jdbcTemplate.queryForObject(sql.toString(), params.toArray(), Long.class);
     }
@@ -122,7 +129,7 @@ public class ProductDaoImpl extends AbstractShardTableDao<Product> implements Pr
     @Override
     @SharedDataSource
     public int insert(ProductSaveForm product) throws BusinessException {
-        String sql = replaceSql(INSERT_SQL,Product.class,product);
+        String sql = getBaseSql(ProductSqlGenerator.INSERT_ONE,product);
         KeyHolder keyHolder = new GeneratedKeyHolder();
         try {
             jdbcTemplate.update(connection -> {
@@ -148,7 +155,7 @@ public class ProductDaoImpl extends AbstractShardTableDao<Product> implements Pr
         if (Objects.isNull(product) || Objects.isNull(product.getId())) {
             return 0;
         }
-        String sql = replaceSql(UPDATE_SQL,Product.class,product);
+        String sql = getBaseSql(ProductSqlGenerator.UPDATE_ONE,product);
         try {
             return jdbcTemplate.update(sql, preparedStatement -> {
                 Timestamp now = new Timestamp(System.currentTimeMillis());
@@ -166,8 +173,8 @@ public class ProductDaoImpl extends AbstractShardTableDao<Product> implements Pr
     @Override
     @SharedDataSource
     public int deleteById(IdForm idForm) {
-        String sql = replaceSql(DELETE_SQL,Product.class,idForm);
-        return jdbcTemplate.update(sql, new Object[]{idForm.getId()});
+        String sql = getBaseSql(ProductSqlGenerator.DELETE_ONE,idForm);
+        return jdbcTemplate.update(sql, new Object[]{idForm.getId(),idForm.getUserId()});
     }
 
 }

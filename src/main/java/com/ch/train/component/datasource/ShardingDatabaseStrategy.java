@@ -24,7 +24,7 @@ public interface ShardingDatabaseStrategy {
      * @param dataAuthForm
      * @return string
      */
-    int getShardTableType(DataAuthForm dataAuthForm);
+    Integer getShardTableType(DataAuthForm dataAuthForm);
 
 
     /**

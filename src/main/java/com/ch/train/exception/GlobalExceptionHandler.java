@@ -15,7 +15,8 @@ import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    private static Log logger = LogFactory.getLog(HelloController.class);
+    private static Log logger = LogFactory.getLog(GlobalExceptionHandler.class);
+
     @ExceptionHandler(value = BusinessException.class)
     public ModelAndView exceptionHandler(BusinessException e) {
         ModelAndView mv = new ModelAndView();

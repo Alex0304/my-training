@@ -27,9 +27,9 @@ public class ProductQueryPageForm extends DataAuthForm {
         this.size = size;
     }
 
-    private int page;
+    private int page = 1;
 
-    private int size;
+    private int size = 5;
 
     public String getName() {
         return name;

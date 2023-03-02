@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 
 /**
  * 商品表(Product)表服务实现类
@@ -47,9 +48,9 @@ public class ProductServiceImpl implements ProductService {
     public Page<Product> queryByPage(ProductQueryPageForm form) {
         long total = this.productDao.count(form);
         if (total == 0) {
-            return null;
+            return new PageImpl<>(new ArrayList<>(),new PageRequest(form.getPage()-1, form.getSize()),0);
         }
-        return new PageImpl<>(this.productDao.queryAllByLimit(form), new PageRequest(form.getPage(), form.getSize()), total);
+        return new PageImpl<>(this.productDao.queryAllByLimit(form), new PageRequest(form.getPage()-1, form.getSize()), total);
     }
 
     /**

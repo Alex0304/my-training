@@ -10,6 +10,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author DXM-0189
@@ -39,11 +40,13 @@ public class AsyncTaskServiceImpl implements AsyncTaskService {
             boolean zipSuccess = true;
             try {
                 GZipUtils.compress(url, false);
+                TimeUnit.SECONDS.sleep(5);
             } catch (Exception e) {
                 log.error("压缩文件失败，{}"+e.getMessage());
                 // 压缩失败，修改失败数量
                 zipSuccess = false;
             }
+
             if (zipSuccess) {
                 successNum += 1;
             } else {
