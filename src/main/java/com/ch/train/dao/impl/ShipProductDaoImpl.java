@@ -35,4 +35,5 @@ public class ShipProductDaoImpl implements ShipProductDao {
         },keyHolder);
         return keyHolder.getKey().intValue();
     }
+
 }
