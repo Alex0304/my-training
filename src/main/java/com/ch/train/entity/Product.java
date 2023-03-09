@@ -1,5 +1,6 @@
 package com.ch.train.entity;
 
+import com.ch.train.annotation.TableField;
 import com.ch.train.component.datasource.ShardingTable;
 
 import java.math.BigDecimal;
@@ -18,32 +19,40 @@ public class Product implements Serializable {
     /**
      * 主键id
      */
+    @TableField("id")
     private Integer id;
+
     /**
      * 商品名称
      */
+    @TableField("name")
     private String name;
     /**
      * 商品描述
      */
+    @TableField("desc")
     private String desc;
     /**
      * 商品价格
      */
+    @TableField("price")
     private BigDecimal price;
     /**
      * 创建时间
      */
+    @TableField("create_time")
     private Date createTime;
     /**
      * 修改时间
      */
+    @TableField("update_time")
     private Date updateTime;
 
 
     /**
      * 用户id
      */
+    @TableField("user_id")
     private Integer userId;
 
 
