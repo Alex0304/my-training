@@ -30,7 +30,7 @@ public class Product implements Serializable {
     /**
      * 商品描述
      */
-    @TableField("desc")
+    @TableField("description")
     private String desc;
     /**
      * 商品价格

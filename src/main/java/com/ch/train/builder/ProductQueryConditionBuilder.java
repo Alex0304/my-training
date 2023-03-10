@@ -9,22 +9,22 @@ import java.util.Objects;
 /**
  * @author DXM-0189
  */
-public class ProductConditionBuilder implements ConditionBuilder{
+public class ProductQueryConditionBuilder implements ConditionBuilder{
 
     private StringBuilder conditionBuilder;
 
     private List<Object> objects;
 
-    public ProductConditionBuilder(StringBuilder conditionBuilder, List<Object> objects) {
+    public ProductQueryConditionBuilder(StringBuilder conditionBuilder, List<Object> objects) {
         this.conditionBuilder = conditionBuilder;
         this.objects = objects;
     }
 
-    public static ProductConditionBuilder builder(String baseSql){
-        return new ProductConditionBuilder(new StringBuilder(baseSql),new ArrayList<>());
+    public static ProductQueryConditionBuilder builder(String baseSql){
+        return new ProductQueryConditionBuilder(new StringBuilder(baseSql),new ArrayList<>());
     }
 
-    public ProductConditionBuilder andIdEquals(Integer id){
+    public ProductQueryConditionBuilder andIdEquals(Integer id){
         if(Objects.isNull(id)){
             return this;
         }
@@ -34,7 +34,7 @@ public class ProductConditionBuilder implements ConditionBuilder{
     }
 
 
-    public ProductConditionBuilder andNameEquals(String name){
+    public ProductQueryConditionBuilder andNameEquals(String name){
         if(StringUtils.isEmpty(name)){
             return this;
         }
@@ -43,7 +43,7 @@ public class ProductConditionBuilder implements ConditionBuilder{
         return this;
     }
 
-    public ProductConditionBuilder userIdEquals(Integer userId){
+    public ProductQueryConditionBuilder userIdEquals(Integer userId){
         if(Objects.isNull(userId)){
             return this;
         }
@@ -52,12 +52,12 @@ public class ProductConditionBuilder implements ConditionBuilder{
         return this;
     }
 
-    public ProductConditionBuilder orderByUpdateTimeDesc(){
+    public ProductQueryConditionBuilder orderByUpdateTimeDesc(){
         conditionBuilder.append(" order by update_time desc");
         return this;
     }
 
-    public ProductConditionBuilder limit(int page,int size){
+    public ProductQueryConditionBuilder limit(int page, int size){
         conditionBuilder.append(" limit ?,?");
         if(page<=1){
             objects.add(0);
@@ -68,14 +68,14 @@ public class ProductConditionBuilder implements ConditionBuilder{
         return this;
     }
 
-    public ProductConditionBuilder where(){
+    public ProductQueryConditionBuilder where(){
         conditionBuilder.append(" where ");
         return this;
     }
 
 
     @Override
-    public String getCondition() {
+    public String getSql() {
         return conditionBuilder.toString();
     }
 

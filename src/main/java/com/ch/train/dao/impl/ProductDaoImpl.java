@@ -1,27 +1,24 @@
 package com.ch.train.dao.impl;
 
-import com.ch.train.builder.ProductConditionBuilder;
+import com.ch.train.builder.InsertConditionBuilder;
+import com.ch.train.builder.ProductQueryConditionBuilder;
 import com.ch.train.component.datasource.SharedDataSource;
 import com.ch.train.component.factory.sql.SqlFactory;
 import com.ch.train.component.factory.sql.impl.ProductSqlGenerator;
-import com.ch.train.component.factory.sql.impl.ShardingSqlFactory;
 import com.ch.train.controller.HelloController;
 import com.ch.train.dao.ProductDao;
 import com.ch.train.entity.Product;
 import com.ch.train.exception.BusinessException;
-import com.ch.train.form.DataAuthForm;
 import com.ch.train.form.IdForm;
 import com.ch.train.form.ProductQueryPageForm;
 import com.ch.train.form.ProductSaveForm;
 import com.ch.train.mapper.MyObjectMapper;
-import com.ch.train.mapper.ProductMapper;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DuplicateKeyException;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -29,7 +26,6 @@ import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -68,21 +64,6 @@ public class ProductDaoImpl extends BaseDaoImpl implements ProductDao {
         String baseSql = getBaseSql(ProductSqlGenerator.QUERY_ONE,idForm);
         Integer[] args = new Integer[]{idForm.getId()};
         Product product = jdbcTemplate.queryForObject(baseSql, args, (rs, rowNum) -> productMapper.convertOne(rs));
-//        try {
-//            product = jdbcTemplate.queryForObject(baseSql, args, (rs, rowNum) -> {
-//                Product temp = new Product();
-//                temp.setId(rs.getInt("id"));
-//                temp.setName(rs.getString("name"));
-//                temp.setPrice(rs.getBigDecimal("price"));
-//                temp.setDesc(rs.getString("desc"));
-//                temp.setCreateTime(rs.getTimestamp("create_time"));
-//                temp.setUpdateTime(rs.getTimestamp("update_time"));
-//                temp.setUserId(rs.getInt("user_id"));
-//                return temp;
-//            });
-//        } catch (EmptyResultDataAccessException e) {
-//            logger.error("查询的商品信息不存在");
-//        }
         return product;
     }
 
@@ -90,80 +71,36 @@ public class ProductDaoImpl extends BaseDaoImpl implements ProductDao {
     @SharedDataSource
     public List<Product> queryAllByLimit(ProductQueryPageForm form) {
         String baseSql = getBaseSql(ProductSqlGenerator.QUERY_PAGE,form);
-//        StringBuilder sql = new StringBuilder(baseSql);
-//        ArrayList<Object> params = new ArrayList<>();
-//        if(Objects.nonNull(form.getUserId())){
-//            params.add(form.getUserId());
-//            sql.append(" where user_id = ? ");
-//        }
-//        sql.append("order by update_time desc");
-//        sql.append(" limit ?,? ");
-//        int page = form.getPage();
-//        int size = form.getSize();
-//        if(page<=1){
-//            params.add(0);
-//        }else {
-//            params.add((page -1)*size);
-//        }
-//        params.add(size);
-        ProductConditionBuilder productConditionBuilder = ProductConditionBuilder.builder(baseSql).where().userIdEquals(form.getUserId()).andNameEquals(form.getName()).orderByUpdateTimeDesc().limit(form.getPage(), form.getSize());
-        return jdbcTemplate.query(productConditionBuilder.getCondition(), productConditionBuilder.getArgs(), resultSet ->{
+        ProductQueryConditionBuilder productConditionBuilder = ProductQueryConditionBuilder.builder(baseSql).where().userIdEquals(form.getUserId()).andNameEquals(form.getName()).orderByUpdateTimeDesc().limit(form.getPage(), form.getSize());
+        return jdbcTemplate.query(productConditionBuilder.getSql(), productConditionBuilder.getArgs(), resultSet ->{
             List<Product> productList = productMapper.convertList(resultSet);
             return productList;
         });
-//        List<Product> productList = jdbcTemplate.query(sql.toString(), params.toArray(), resultSet -> {
-//            List<Product> list = new ArrayList<>();
-//            while (resultSet.next()) {
-//                Product temp = new Product();
-//                temp.setId(resultSet.getInt("id"));
-//                temp.setName(resultSet.getString("name"));
-//                temp.setPrice(resultSet.getBigDecimal("price"));
-//                temp.setDesc(resultSet.getString("desc"));
-//                temp.setCreateTime(resultSet.getTimestamp("create_time"));
-//                temp.setUpdateTime(resultSet.getTimestamp("update_time"));
-//                temp.setUserId(resultSet.getInt("user_id"));
-//                list.add(temp);
-//            }
-//            return list;
-//        });
-     //   return productList;
     }
 
     @Override
     @SharedDataSource
     public long count(ProductQueryPageForm form) {
         String baseSql = getBaseSql(ProductSqlGenerator.QUERY_COUNT, form);
-//        StringBuilder sql = new StringBuilder(baseSql);
-//        ArrayList<Object> params = new ArrayList<>();
-//        if(Objects.nonNull(form.getUserId())){
-//            params.add(form.getUserId());
-//            sql.append(" where user_id = ? ");
-//        }
-        ProductConditionBuilder productConditionBuilder = ProductConditionBuilder.builder(baseSql).where().userIdEquals(form.getUserId()).andNameEquals(form.getName());
-        return jdbcTemplate.queryForObject(productConditionBuilder.getCondition(), productConditionBuilder.getArgs(), Long.class);
+        ProductQueryConditionBuilder productConditionBuilder = ProductQueryConditionBuilder.builder(baseSql).where().userIdEquals(form.getUserId()).andNameEquals(form.getName());
+        return jdbcTemplate.queryForObject(productConditionBuilder.getSql(), productConditionBuilder.getArgs(), Long.class);
     }
 
     @Override
     @SharedDataSource
-    public int insert(ProductSaveForm product) throws BusinessException {
-        String sql = getBaseSql(ProductSqlGenerator.INSERT_ONE,product);
-        KeyHolder keyHolder = new GeneratedKeyHolder();
+    public int insert(ProductSaveForm saveForm) throws BusinessException {
+       String sql = getBaseSql(ProductSqlGenerator.INSERT_ONE,saveForm);
         try {
-            jdbcTemplate.update(connection -> {
-                PreparedStatement preparedStatement = connection.prepareStatement(sql, new String[]{"id"});
-                Timestamp now = new Timestamp(System.currentTimeMillis());
-                preparedStatement.setString(1, product.getName());
-                preparedStatement.setString(2, product.getDesc());
-                preparedStatement.setBigDecimal(3, product.getPrice());
-                preparedStatement.setInt(4, product.getUserId());
-                preparedStatement.setTimestamp(5, now);
-                preparedStatement.setTimestamp(6, now);
-                return preparedStatement;
-            }, keyHolder);
+            Product product = new Product();
+            BeanUtils.copyProperties(saveForm,product);
+            InsertConditionBuilder builder = InsertConditionBuilder.builder(sql,product);
+            jdbcTemplate.update(builder.getSql(),builder.getArgs());
         } catch (DuplicateKeyException ex) {
             throw new BusinessException("商品名称不能重复");
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
         }
-        return keyHolder.getKey().intValue();
+        return 0;
     }
 
     @Override
