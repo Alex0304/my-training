@@ -45,6 +45,7 @@ public class ProductDaoImpl extends BaseDaoImpl implements ProductDao {
         super(sqlFactory);
     }
 
+    //test
     @Resource
     private JdbcTemplate jdbcTemplate;
 

@@ -6,6 +6,7 @@ import com.ch.train.form.IdForm;
 import com.ch.train.form.ProductQueryPageForm;
 import com.ch.train.form.ProductSaveForm;
 import com.ch.train.service.ProductService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +29,7 @@ public class ProductController {
     /**
      * 服务对象
      */
-    @Resource
+    @Autowired
     private ProductService productService;
 
 
@@ -85,6 +86,8 @@ public class ProductController {
         model.addAttribute("product", product);
         return "product/update";
     }
+
+
 
     /**
      * 编辑数据
